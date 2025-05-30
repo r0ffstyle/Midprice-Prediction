@@ -36,4 +36,3 @@ The full write-up is available as a PDF:
 │   └── visualization.py        # plotting & result dashboards
 │
 ├── DLHFPP.pdf                  # Master’s thesis document
-└── .gitignore                  # ignore rules (e.g. data/, results/)
