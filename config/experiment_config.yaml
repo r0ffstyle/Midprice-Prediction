@@ -1,0 +1,38 @@
+# Experiment configuration parameters
+# This file contains configurations for running experiments
+
+# Execution settings
+execution:
+  device: "cuda"              # Device to use for training ("cuda" or "cpu")
+  num_workers: 4              # Number of workers for data loading
+  pin_memory: true            # Whether to pin memory for CUDA
+  verbose: true               # Whether to print verbose output
+  log_level: "INFO"           # Logging level
+
+# Hyperparameter tuning settings
+hyperparameter_tuning:
+  enabled: false              # Whether to perform hyperparameter tuning
+  method: "grid"              # Tuning method ("grid" or "random")
+  metric: "val_loss"          # Metric to optimize
+  
+  grid:
+    cnn:
+      # Parameters to tune for CNN model
+      conv_channels: [[16, 32, 64], [32, 64, 128], [16, 32, 32, 64]]
+      fc_units: [[512, 256], [256, 128], [512, 256, 128]]
+      dropout: [0.1, 0.2, 0.3]
+      learning_rate: [0.0001, 0.001, 0.01]
+    
+    lstm:
+      # Parameters to tune for LSTM model
+      hidden_dim: [64, 128, 256]
+      num_layers: [1, 2, 3]
+      dropout: [0.1, 0.2, 0.3]
+      learning_rate: [0.0001, 0.001, 0.01]
+    
+    cnn_lstm:
+      # Parameters to tune for CNN-LSTM model
+      conv_channels: [[16, 32, 64], [32, 64, 128]]
+      lstm_hidden_dim: [64, 128, 256]
+      dropout: [0.1, 0.2, 0.3]
+      learning_rate: [0.0001, 0.001]

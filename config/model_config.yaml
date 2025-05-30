@@ -1,0 +1,120 @@
+# Model configuration parameters
+# This file contains configurations for model architectures, training, and evaluation
+
+# General model parameters
+general:
+  seed: 666                  # Random seed for reproducibility
+  output_dir: "../results"  # Directory to store results
+  models_dir: "../results/models"  # Directory to store trained models
+  metrics_dir: "../results/metrics"  # Directory to store evaluation metrics
+
+# CNN model parameters
+cnn:
+  enabled: true             # Whether to train CNN model
+  architecture:
+    conv_channels: [16, 32, 64]  # Number of channels in each convolutional layer
+    # kernel_sizes: [5, 5, 5]      # Kernel sizes for convolutional layers
+    fc_units: [512, 256]         # Number of units in fully connected layers
+    dropout: 0.5                 # Dropout rate for regularization
+  
+  training:
+    batch_size: 64               # Batch size for training
+    num_epochs: 50               # Maximum number of epochs to train
+    learning_rate: 0.001         # Initial learning rate
+    weight_decay: 0.00001        # L2 regularization strength
+    scheduler:
+      type: "plateau"            # Type of learning rate scheduler
+      patience: 3                # Patience for ReduceLROnPlateau
+      factor: 0.5                # Factor by which to reduce learning rate
+    early_stopping:
+      enabled: true              # Whether to use early stopping
+      patience: 3               # Patience for early stopping
+      min_delta: 0.0001          # Minimum change to be considered as improvement
+
+# LSTM model parameters
+lstm:
+  enabled: false            # Whether to train LSTM model
+  architecture:
+    hidden_dim: 128              # Number of hidden units in LSTM
+    num_layers: 2                # Number of LSTM layers
+    fc_units: [256, 128]         # Number of units in fully connected layers
+    dropout: 0.5                 # Dropout rate for regularization
+    bidirectional: false         # Whether to use bidirectional LSTM
+  
+  training:
+    batch_size: 64               # Batch size for training
+    num_epochs: 50               # Maximum number of epochs to train
+    learning_rate: 0.001         # Initial learning rate
+    weight_decay: 0.00001        # L2 regularization strength
+    scheduler:
+      type: "plateau"            # Type of learning rate scheduler
+      patience: 3                # Patience for ReduceLROnPlateau
+      factor: 0.5                # Factor by which to reduce learning rate
+    early_stopping:
+      enabled: true              # Whether to use early stopping
+      patience: 3               # Patience for early stopping
+      min_delta: 0.0001          # Minimum change to be considered as improvement
+
+# CNN-LSTM model parameters
+cnn_lstm:
+  enabled: true            # Whether to train CNN-LSTM model
+  architecture:
+    conv_channels: [16, 32, 64]  # Number of channels in each convolutional layer
+    # kernel_sizes: [5, 5, 5]      # Kernel sizes for convolutional layers
+    lstm_hidden_dim: 128         # Number of hidden units in LSTM
+    lstm_layers: 2               # Number of LSTM layers
+    fc_units: [256, 128]         # Number of units in fully connected layers
+    dropout: 0.5                 # Dropout rate for regularization
+  
+  training:
+    batch_size: 64               # Batch size for training
+    num_epochs: 50               # Maximum number of epochs to train
+    learning_rate: 0.001         # Initial learning rate
+    weight_decay: 0.00001        # L2 regularization strength
+    scheduler:
+      type: "plateau"            # Type of learning rate scheduler
+      patience: 3                # Patience for ReduceLROnPlateau
+      factor: 0.5                # Factor by which to reduce learning rate
+    early_stopping:
+      enabled: true              # Whether to use early stopping
+      patience: 3                # Patience for early stopping
+      min_delta: 0.0001          # Minimum change to be considered as improvement
+
+# ARX model parameters
+arx:
+  training:
+    # these keys won’t actually be used, but they satisfy the lookup
+    batch_size: 1
+    num_epochs:   1
+    learning_rate: 0.0
+    weight_decay:  0.0
+    early_stopping:
+      patience: 0
+
+
+# Evaluation parameters
+evaluation:
+  batch_size: 64                 # Batch size for evaluation
+  metrics: ["mse", "mae", "r2", "r2_oos", "sign_accuracy"]  # Metrics to calculate
+  visualize_predictions: true    # Whether to visualize predictions
+  target_horizons: [1, 5, 10]    # Specific horizons to focus on for detailed evaluation
+
+# Rolling window evaluation parameters
+rolling_window:
+  enabled: true                  # Whether to perform rolling window evaluation
+  window_size: 10000             # Number of data points in each window
+  step_size: 5000                # Step size between windows
+  num_windows: 3                 # Number of windows to evaluate
+  model_type: "cnn"              # Type of model to use for rolling window evaluation
+  
+  # Train/validation/test split parameters
+  split_method: "time"           # Options: "time" or "percentage"
+  train_days: 21                 # 3 weeks for training (if split_method is "time")
+  val_days: 7                    # 1 week for validation
+  test_days: 7                   # 1 week for testing
+  timestamp_col: "time"          # Name of timestamp column in data
+  
+  # Fallback percentages (used if timestamps unavailable or split_method is "percentage")
+  train_percentage: 0.6          # 60% for training
+  val_percentage: 0.2            # 20% for validation
+  test_percentage: 0.2           # 20% for testing
